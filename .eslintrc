@@ -8,8 +8,8 @@
   "parserOptions": {
     "parser": "babel-eslint",
     "ecmaVersion": "latest",
-    // "sourceType": "module",
-    "sourceType": "script"
+    "sourceType": "module"
+    // "sourceType": "script"
   },
   "rules": {
     "no-console": "off",
