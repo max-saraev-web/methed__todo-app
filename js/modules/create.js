@@ -80,7 +80,13 @@ export const createRow = ({num, task, condition}) => {
   `;
   const finishBtn = createBtn('button', 'Завершить',
     'btn', 'btn-success');
-  tdBtns.append(delBtn, finishBtn);
+  finishBtn.style.cssText = `
+    margin-right: 12px;
+    outline: none;
+  `;
+  const editBtn = createBtn('button', 'Редактировать',
+    'btn', 'btn-info');
+  tdBtns.append(delBtn, finishBtn, editBtn);
 
   tr.append(tdNum, tdTask, tdCondition, tdBtns);
 

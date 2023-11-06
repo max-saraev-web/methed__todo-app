@@ -14,3 +14,9 @@ export const countRows = () => {
     elem.querySelector('.to-do__counter').textContent = i + 1;
   });
 };
+
+export const consciousDel = msg => {
+  const delCondition = confirm(msg);
+  console.log(delCondition);
+  return delCondition;
+};

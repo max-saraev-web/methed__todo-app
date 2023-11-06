@@ -1,6 +1,11 @@
 import {createRow} from './create.js';
 import {getStorage, setStorage} from './storage.js';
-import {countRows, generateId} from './utils.js';
+import {consciousDel, countRows, generateId} from './utils.js';
+import {MESSAGES} from './messages.js';
+
+const {ru: {
+  delWarning,
+}} = MESSAGES;
 
 export const formControl = (form, list, currentUser, submitBtn) => {
   form.addEventListener('submit', ev => {
@@ -69,18 +74,42 @@ export const rowControl = (app, user) => {
     }
 
     if (target.matches('.btn-danger')) {
+      if (consciousDel(delWarning)) {
+        const currentStorage = getStorage(user);
+        const targetId = target.closest('tr').querySelector('.to-do__counter')
+          .dataset.id;
+
+        target.closest('.table__row').remove();
+
+        const objNum = currentStorage.
+          findIndex(elem => elem.num === targetId);
+
+        currentStorage.splice(objNum, 1);
+        setStorage(currentStorage, user);
+        countRows();
+      }
+    }
+    if (target.matches('.btn-info')) {
+      const editField = target.closest('tr').querySelector('.task');
       const currentStorage = getStorage(user);
       const targetId = target.closest('tr').querySelector('.to-do__counter')
         .dataset.id;
-
-      target.closest('.table__row').remove();
-
       const objNum = currentStorage.
         findIndex(elem => elem.num === targetId);
-
-      currentStorage.splice(objNum, 1);
-      setStorage(currentStorage, user);
-      countRows();
+      if (editField.getAttribute('contenteditable') === 'true') {
+        editField.setAttribute('contenteditable', 'false');
+        editField.style.cssText = `
+          border: none;
+        `;
+        currentStorage[objNum].task = editField.textContent;
+        setStorage(currentStorage, user);
+      } else {
+        const editField = target.closest('tr').querySelector('.task');
+        editField.setAttribute('contenteditable', 'true');
+        editField.style.cssText = `
+          border: 3px solid #0DCAF0;
+        `;
+      }
     }
   });
 };
