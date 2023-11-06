@@ -1,5 +1,9 @@
+import {addController} from './modules/addController.js';
+import {formControl, rowControl} from './modules/control.js';
 import {logIn} from './modules/login.js';
-import {renderToDo} from './modules/render.js';
+import {renderTasks, renderToDo} from './modules/render.js';
+import {getStorage} from './modules/storage.js';
+import {countRows} from './modules/utils.js';
 
 
 const init = (selector) => {
@@ -8,6 +12,16 @@ const init = (selector) => {
   if (currentUser === undefined) {
     return;
   }
-  renderToDo(app, currentUser);
+  const {
+    form,
+    submitBtn,
+    clearBtn,
+    list} = renderToDo(app, currentUser);
+  renderTasks(list, getStorage(currentUser));
+
+  countRows();
+  formControl(form, list, currentUser, submitBtn);
+  addController(form, submitBtn, clearBtn);
+  rowControl(app, currentUser);
 };
 init('.app-container');
