@@ -7,6 +7,8 @@ const {ru: {
   delWarning,
 }} = MESSAGES;
 
+const setRankProp = (arr, i, val) => arr[i].rank = val;
+
 export const formControl = (form, list, currentUser, submitBtn) => {
   form.addEventListener('submit', ev => {
     ev.preventDefault();
@@ -51,7 +53,9 @@ export const rowControl = (app, user) => {
         currentStorage[modifiedObjNum] = modifiedObj;
         setStorage(currentStorage, user);
       } else {
-        target.closest('tr').classList.remove('table-light');
+        target.closest('tr').classList.remove('table-light',
+          'table-warning',
+          'table-danger');
         target.closest('tr').classList.add('table-success');
         target.closest('tr').querySelector('.task')
           .classList.add('text-decoration-line-through');
@@ -110,6 +114,59 @@ export const rowControl = (app, user) => {
           border: 3px solid #0DCAF0;
         `;
       }
+    }
+    if (target.matches('.dropdown-item')) {
+      if (target.closest('tr').classList.contains('table-success')) {
+        target.closest('tr').classList.remove('table-success');
+        target.closest('tr').classList.add('table-light');
+        target.closest('tr').querySelector('.task')
+          .classList.remove('text-decoration-line-through');
+        target.closest('tr').querySelector('.to-do__condition')
+          .textContent = 'В процессе';
+
+        const targetId = target.closest('tr').querySelector('.to-do__counter')
+          .dataset.id;
+        const currentStorage = getStorage(user);
+
+        const modifiedObj = currentStorage.find(elem => elem.num === targetId);
+        modifiedObj.condition = 'В процессе';
+
+        const modifiedObjNum = currentStorage.
+          findIndex(elem => elem.num === targetId);
+
+        currentStorage[modifiedObjNum] = modifiedObj;
+        setStorage(currentStorage, user);
+      }
+
+      const currentStorage = getStorage(user);
+      const targetId = target.closest('tr').querySelector('.to-do__counter')
+        .dataset.id;
+      const objNum = currentStorage.
+        findIndex(elem => elem.num === targetId);
+
+      const taskRank = target.textContent;
+      setRankProp(currentStorage, objNum, taskRank);
+      setStorage(currentStorage, user);
+      const toggleBtn = target.closest('.dropdown')
+        .querySelector('.dropdown-toggle');
+      toggleBtn.textContent = taskRank;
+      const parentRow = target.closest('.table__row');
+
+      parentRow.className = parentRow.className.split(' ')
+        .filter((className) =>
+          !className.startsWith('table-'))
+        .join(' ');
+
+      const classToAdd = () => {
+        if (target.classList.contains('bg-primary')) {
+          return 'table-light';
+        } else if (target.classList.contains('bg-warning')) {
+          return 'table-warning';
+        } else if (target.classList.contains('bg-danger')) {
+          return 'table-danger';
+        }
+      };
+      parentRow.classList.add(classToAdd());
     }
   });
 };

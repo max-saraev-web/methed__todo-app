@@ -34,15 +34,25 @@ export const createBtn = (type, text, ...classes) => createElement(
   },
 );
 
-export const createRow = ({num, task, condition}) => {
+export const createRow = ({num, task, condition,
+  rank = 'Насколько задача важная ? '}) => {
   const tr = createElement(
     'tr',
     {
       className: condition === 'Выполнена' ?
-        'table-success' : 'table-light',
+        'table-success' : '',
     },
   );
-  tr.classList.add('table__row');
+  const classToAdd = () => {
+    if (rank === 'Неважное дело') {
+      return 'table-light';
+    } else if (rank === 'Дело средней важности') {
+      return 'table-warning';
+    } else if (rank === 'Дело повышенной важности') {
+      return 'table-danger';
+    }
+  };
+  tr.classList.add('table__row', classToAdd());
 
   const tdNum = createElement(
     'td',
@@ -72,21 +82,69 @@ export const createRow = ({num, task, condition}) => {
   const tdBtns = createElement(
     'td',
   );
+  tdBtns.style.cssText = `
+    display: flex;
+    gap: 12px;
+  `;
   const delBtn = createBtn('button', 'Удалить',
     'btn', 'btn-danger');
-  delBtn.style.cssText = `
-    margin-right: 12px;
-    outline: none;
-  `;
   const finishBtn = createBtn('button', 'Завершить',
     'btn', 'btn-success');
-  finishBtn.style.cssText = `
-    margin-right: 12px;
-    outline: none;
-  `;
   const editBtn = createBtn('button', 'Редактировать',
     'btn', 'btn-info');
-  tdBtns.append(delBtn, finishBtn, editBtn);
+  const createSelect = () => {
+    const selectWrap = createElement(
+      'ul',
+      {
+        className: 'dropdown-menu',
+      },
+      {
+        appends: [
+          createElement(
+            'li',
+            {
+              'className': 'bg-primary dropdown-item',
+              'textContent': 'Неважное дело',
+            },
+          ),
+          createElement(
+            'li',
+            {
+              'className': 'bg-warning dropdown-item',
+              'textContent': 'Дело средней важности',
+            },
+          ),
+          createElement(
+            'li',
+            {
+              'className': 'bg-danger dropdown-item',
+              'textContent': 'Дело повышенной важности',
+            },
+          ),
+        ],
+      },
+    );
+    // ? - сюда нужно вставить значение свойства rank
+    const dropdownBtn = createBtn(
+      'button',
+      rank,
+      'btn',
+      'btn-secondary',
+      'dropdown-toggle',
+    );
+    dropdownBtn.setAttribute('data-bs-toggle', 'dropdown');
+    const dropdown = createElement(
+      'div',
+      {
+        className: 'dropdown',
+      },
+      {
+        appends: [dropdownBtn, selectWrap],
+      },
+    );
+    return dropdown;
+  };
+  tdBtns.append(delBtn, finishBtn, editBtn, createSelect());
 
   tr.append(tdNum, tdTask, tdCondition, tdBtns);
 
@@ -162,3 +220,10 @@ export const createForm = () => {
   );
   return form;
 };
+
+export const createBootstrapJs = () => createElement(
+  'script',
+  {
+    src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js',
+  },
+);

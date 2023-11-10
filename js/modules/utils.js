@@ -17,6 +17,5 @@ export const countRows = () => {
 
 export const consciousDel = msg => {
   const delCondition = confirm(msg);
-  console.log(delCondition);
   return delCondition;
 };
