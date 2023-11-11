@@ -44,12 +44,16 @@ export const createRow = ({num, task, condition,
     },
   );
   const classToAdd = () => {
-    if (rank === 'Неважное дело') {
-      return 'table-light';
-    } else if (rank === 'Дело средней важности') {
-      return 'table-warning';
-    } else if (rank === 'Дело повышенной важности') {
-      return 'table-danger';
+    if (condition === 'Выполнена') {
+      return 'table-success';
+    } else {
+      if (rank === 'Неважное дело') {
+        return 'table-light';
+      } else if (rank === 'Дело средней важности') {
+        return 'table-warning';
+      } else if (rank === 'Дело повышенной важности') {
+        return 'table-danger';
+      }
     }
   };
   tr.classList.add('table__row', classToAdd());

@@ -33,8 +33,19 @@ export const rowControl = (app, user) => {
 
     if (target.matches('.btn-success')) {
       if (target.closest('tr').classList.contains('table-success')) {
+        const dropdown = target.parentElement
+          .querySelector('.dropdown').firstElementChild.textContent;
+        const classToAdd = () => {
+          if (dropdown === 'Неважное дело') {
+            return 'table-light';
+          } else if (dropdown === 'Дело средней важности') {
+            return 'table-warning';
+          } else if (dropdown === 'Дело повышенной важности') {
+            return 'table-danger';
+          }
+        };
         target.closest('tr').classList.remove('table-success');
-        target.closest('tr').classList.add('table-light');
+        target.closest('tr').classList.add(classToAdd());
         target.closest('tr').querySelector('.task')
           .classList.remove('text-decoration-line-through');
         target.closest('tr').querySelector('.to-do__condition')
