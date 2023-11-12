@@ -22,7 +22,7 @@ export const formControl = (form, list, currentUser, submitBtn) => {
     namedStorage.push(newTask);
     setStorage(namedStorage, currentUser);
     form.reset();
-    submitBtn.setAttribute('disabled', 'true');
+    submitBtn.disabled = true;
     countRows();
   });
 };
@@ -36,13 +36,12 @@ export const rowControl = (app, user) => {
         const dropdown = target.parentElement
           .querySelector('.dropdown').firstElementChild.textContent;
         const classToAdd = () => {
-          if (dropdown === 'Неважное дело') {
-            return 'table-light';
-          } else if (dropdown === 'Дело средней важности') {
-            return 'table-warning';
-          } else if (dropdown === 'Дело повышенной важности') {
-            return 'table-danger';
-          }
+          const classMap = {
+            'Неважное дело': 'table-light',
+            'Дело средней важности': 'table-warning',
+            'Дело повышенной важности': 'table-danger',
+          };
+          return classMap[dropdown];
         };
         target.closest('tr').classList.remove('table-success');
         target.closest('tr').classList.add(classToAdd());

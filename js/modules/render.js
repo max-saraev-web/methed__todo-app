@@ -12,7 +12,7 @@ export const renderToDo = (app, name) => {
   const formInput = createFormInput();
   const submitBtn = createBtn('submit', 'Сохранить',
     'btn', 'btn-primary', 'me-3');
-  submitBtn.setAttribute('disabled', 'true');
+  submitBtn.disabled = true;
   const clearBtn = createBtn('reset', 'Очистить',
     'btn', 'btn-warning');
 
