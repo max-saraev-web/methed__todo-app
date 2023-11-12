@@ -10,11 +10,10 @@ import {countRows} from './modules/utils.js';
 const init = (selector) => {
   document.head.prepend(createBootstrapJs());
   const app = document.querySelector(selector);
-  // const currentUser = logIn();
-  // if (currentUser === undefined) {
-  //   return;
-  // }
-  const currentUser = 'Марика';
+  const currentUser = logIn();
+  if (currentUser === undefined) {
+    return;
+  }
   const {
     form,
     submitBtn,
